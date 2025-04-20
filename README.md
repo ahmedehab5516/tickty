@@ -1,64 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Movie Seat Booking System - Full Project Overview
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Welcome to the **Movie Seat Booking System**! This system allows users to book seats for movie showtimes, with a smooth flow for selecting seats, confirming the booking, and proceeding with payment. Additionally, it offers several backend management features for movies, showtimes, and seat availability.
 
-## About Laravel
+This README provides an overview of the entire system, covering both frontend and backend components, as well as how users and admins interact with the system.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features of the System
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### **1. Movie & Showtime Management**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+   - **Movie Listings**: The system allows admins to manage a list of movies, each with a title, description, and showtimes.
+   - **Showtimes**: Users can view available showtimes for each movie.
+   - **Movie Details**: When selecting a movie, users see all details about the movie, including available showtimes.
 
-## Learning Laravel
+### **2. Seat Selection for Showtimes**
+   
+   - **Seat Layout**: For each movie's showtime, a seat map is displayed where users can see available, booked, and selected seats.
+   - **Seat Selection**: Users can choose seats by clicking on available seats, which will highlight in the seat map.
+   - **Dynamic Updates**: The seat map automatically updates to reflect the availability of seats, ensuring that users do not select already booked seats.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### **3. Booking Management**
+   
+   - **Confirm Seat Selection**: After selecting a seat, users can confirm their seat selection for a particular showtime.
+   - **Booking History**: Users can view their previous bookings, including movie name, seat, and showtime.
+   - **Booking Details**: The system records all details related to a booking, such as the selected seats, payment method, and movie information.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### **4. Payment Options**
+   
+   - **Payment Methods**: The system supports different payment methods for users to choose from, including:
+     - **Cash**
+     - **Credit Card**
+     - **E-wallet**
+   - **Payment Confirmation**: After confirming the seat selection, users can proceed to pay for their booking using their chosen payment method.
+   - **Pricing Logic**: Pricing can be dynamic (based on the movie/showtime) or fixed for all movies.
 
-## Laravel Sponsors
+### **5. Admin Features (Backend)**
+   
+   - **Admin Panel**: Admins can manage movies, showtimes, and seat availability.
+   - **Movie Management**: Admins can add, update, or remove movies from the system.
+   - **Showtime Management**: Admins can create new showtimes for each movie.
+   - **Seat Management**: Admins can adjust the seat map layout (e.g., number of rows and columns) and mark seats as unavailable if necessary.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### **6. Dynamic Seat Map Interaction**
+   
+   - **Row and Column Dropdowns**: Users can select their preferred row and column using dropdown menus.
+   - **Real-Time Seat Availability**: As users select seats, the seat availability dynamically updates on the page.
+   - **Highlighting Selected Seat**: Users can click a seat or select it from a dropdown, which will highlight and update the booking information.
 
-### Premium Partners
+### **7. Local Storage for Seat Persistence**
+   
+   - **Session Persistence**: Selected seats are stored temporarily in the browser’s local storage, so users can view their selections even if they reload the page or navigate away.
+   - **Local Storage for Booking Data**: The system saves the selected movie, seat, and payment method in the browser’s local storage until the user proceeds with payment.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Tech Stack
 
-## Contributing
+The system is built using the following technologies:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Laravel**: A powerful PHP framework used for backend development.
+- **PHP**: The server-side language powering the backend logic.
+- **MySQL**: Database for storing movies, showtimes, seats, bookings, and user data.
+- **Blade Templating Engine**: Used for rendering views on the frontend.
+- **CSS (Bootstrap)**: For styling the UI and ensuring responsiveness.
+- **JavaScript**: For interactive seat selection and updating UI elements without reloading the page.
 
-## Code of Conduct
+## Database Models
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### **1. Movie**
+   - **Attributes**: Title, description, genre, duration, etc.
+   - **Relationships**: Has many showtimes.
+   
+### **2. Showtime**
+   - **Attributes**: Movie ID, start time, hall ID.
+   - **Relationships**: Belongs to a movie, belongs to a hall, and has many bookings.
 
-## Security Vulnerabilities
+### **3. Seat**
+   - **Attributes**: Hall ID, seat row, seat column, seat type.
+   - **Relationships**: Belongs to a hall and has many bookings.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### **4. Booking**
+   - **Attributes**: User ID, showtime ID, seat ID, payment method, booking status.
+   - **Relationships**: Belongs to a user, showtime, and seat.
 
-## License
+### **5. User**
+   - **Attributes**: Name, email, password, etc.
+   - **Relationships**: Has many bookings.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Setup Instructions
+
+### 1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/movie-seat-booking.git
+cd movie-seat-booking
