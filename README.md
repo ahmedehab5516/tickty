@@ -1,4 +1,4 @@
-# Movie Seat Booking System - Full Project Overview
+# Cinema Managment System 
 
 Welcome to the **Movie Seat Booking System**! This system allows users to book seats for movie showtimes, with a smooth flow for selecting seats, confirming the booking, and proceeding with payment. Additionally, it offers several backend management features for movies, showtimes, and seat availability.
 
