@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="fw-bold mb-0">All Movies</h4>
             <a href="{{ route('movies.create') }}" class="btn btn-primary btn-sm">+ Add New Movie</a>
         </div>

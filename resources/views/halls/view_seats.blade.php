@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div class="card-header  d-flex justify-content-between align-items-center">
             <h4 class="fw-bold mb-0">Seats for {{ $hall->name }}</h4>
             <form method="POST" action="{{ route('seats.update_bulk', $hall->id) }}">
                 @csrf
@@ -32,9 +32,9 @@
                                     <td>{{ $seat->seat_column }}</td>
                                     <td>
                                         <select name="seats[{{ $seat->id }}]" class="form-select form-select-sm">
-                                            <option value="Standard" {{ $seat->seat_type === 'Standard' ? 'selected' : '' }}>Standard</option>
-                                            <option value="VIP" {{ $seat->seat_type === 'VIP' ? 'selected' : '' }}>VIP</option>
-                                            <option value="Not Assigned" {{ $seat->seat_type === 'Not Assigned' ? 'selected' : '' }}>Not Assigned</option>
+                                            <option value="standard" {{ $seat->seat_type === 'standard' ? 'selected' : '' }}>Standard</option>
+                                            <option value="vip" {{ $seat->seat_type === 'vip' ? 'selected' : '' }}>VIP</option>
+                                            <option value="not_assigned" {{ $seat->seat_type === 'not_assigned' ? 'selected' : '' }}>Not Assigned</option>
                                         </select>
                                     </td>
                                 </tr>

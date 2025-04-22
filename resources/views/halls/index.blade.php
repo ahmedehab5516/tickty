@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div class="card-header  d-flex justify-content-between align-items-center">
             <h4 class="fw-bold mb-0">All Halls</h4>
             <a href="{{ route('halls.create') }}" class="btn btn-primary btn-sm">+ Add New Hall</a>
         </div>
@@ -32,7 +32,7 @@
                                     <td>{{ $hall->name }}</td>
                                     <td>{{ $hall->cinema->name ?? 'N/A' }}</td>
                                     <td>{{ $hall->seat_row_count * $hall->seat_column_count }}</td>
-                                    <td>{{ $hall->seats->whereIn('seat_type', ['VIP', 'Standard'])->count() }}</td>
+                                    <td>{{ $hall->seats->whereIn('seat_type', ['vip', 'standard'])->count() }}</td>
                                     <td>{{ $hall->showtimes->count() }}</td>
                                     <td>
                                         <a href="{{ route('halls.edit', $hall->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>

@@ -15,6 +15,7 @@ class Showtime extends Model
         'end_time',
         'language',
         'is_3d',
+        'ticket_price',
         
     ];
 
@@ -41,5 +42,11 @@ class Showtime extends Model
         {
             return $this->belongsTo(Cinema::class);
         }
+
+            // Method to get seats through the hall
+    // public function seats()
+    // {
+    //     return $this->hall->seats(); // Get all seats for the hall associated with this showtime
+    // }
 
 }

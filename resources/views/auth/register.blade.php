@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-white text-center border-bottom-0">
+                <div class="card-header text-center border-bottom-0">
                     <h4 class="fw-bold mb-0">Create Account</h4>
                     <p class="text-muted small mt-1">Join us today</p>
                 </div>

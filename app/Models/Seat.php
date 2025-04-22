@@ -13,7 +13,8 @@ class Seat extends Model
         'hall_id',
         'seat_row',
         'seat_column',
-        'seat_type'
+        'seat_type',
+        'seat_price'
     ];
 
 

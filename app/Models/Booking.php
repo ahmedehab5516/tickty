@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
- protected $fillable = [
-        'user_id',
-        'showtime_id',
-        'seat_id',
-        'status',
-        
-    
-    ];
+protected $fillable = [
+    'user_id',
+    'showtime_id',
+    'seats',
+    'status',
+];
 
+protected $casts = [
+    'seats' => 'array',
+];
 
 
 

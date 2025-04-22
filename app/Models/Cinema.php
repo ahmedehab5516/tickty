@@ -27,4 +27,17 @@ class Cinema extends Model
     {
         return $this->hasMany(Hall::class);
     }
+
+      public function showtimes()
+    {
+        return $this->hasManyThrough(
+            Showtime::class,  // Final model
+            Hall::class,      // Intermediate model
+            'cinema_id',      // FK on halls table...
+            'hall_id',        // FK on showtimes table...
+            'id',             // Local key on cinemas table...
+            'id'              // Local key on halls table...
+        );
+    }
+
 }

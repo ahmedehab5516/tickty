@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm">
-        <div class="card-header bg-white">
+        <div class="card-header ">
             <h4 class="fw-bold mb-0">Create New Showtime</h4>
         </div>
         <div class="card-body">
@@ -54,6 +54,24 @@
                         <option value="Other" {{ old('language', $showtime->language ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
                     </select>
                 </div>
+
+
+<!-- ... above your Start/End Time blocks ... -->
+
+<!-- Ticket Price -->
+<div class="mb-3">
+  <label for="ticket_price" class="form-label">Ticket Price</label>
+  <input
+    type="number"
+    name="ticket_price"
+    id="ticket_price"
+    class="form-control"
+    step="0.01"
+    min="0"
+    value="{{ old('ticket_price') }}"
+    required
+  >
+</div>
 
 
 

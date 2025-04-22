@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-white text-center border-bottom-0">
+                <div class="card-header text-center border-bottom-0">
                     <h4 class="fw-bold mb-0">Welcome Back 👋</h4>
                     <p class="text-muted small mt-1">Please login to your account</p>
                 </div>
@@ -46,7 +46,7 @@
 
                         <!-- Login Button -->
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn">Login</button>
                         </div>
 
                         <!-- Register Link -->

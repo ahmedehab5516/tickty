@@ -1,37 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-    @php
-        use Illuminate\Support\Facades\Auth;
-        $user = Auth::user();
-    @endphp
+@php
+    use Illuminate\Support\Facades\Auth;
+    $user = Auth::user();
+@endphp
 
-    <div class="mt-4">
-        <h1>Welcome, {{ $user->name ?? 'Guest' }}!</h1>
-      
-        <p class="lead">Here you can view your bookings, check showtimes, and manage your account.</p>
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">👋 Welcome, {{ $user->name ?? 'Guest' }}!</h2>
+        <p class="text-muted fs-5">Here you can manage your bookings, view your tickets, and enjoy the show!</p>
+    </div>
 
-        <!-- Example cards or info -->
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-header">My Bookings</div>
-                    <div class="card-body">
-                        <p class="card-text">View all your cinema bookings and history.</p>
-                        <a href="{{ route('user.bookings.index') }}" class="btn btn-light btn-sm">Go</a>
+    <div class="row g-4">
+        <!-- My Bookings -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-ticket-perforated-fill fs-1 text-primary"></i>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">Upcoming Showtimes</div>
-                    <div class="card-body">
-                        <p class="card-text">Browse and book upcoming movie showtimes.</p>
-                        <a href="{{ route('showtimes.index') }}" class="btn btn-light btn-sm">View</a>
-                    </div>
+                    <h5 class="card-title fw-bold">My Bookings</h5>
+                    <p class="card-text text-muted">Check your current and past bookings.</p>
+                    <a href="{{ route('user.bookings.index') }}" class="btn btn-outline-primary rounded-pill">Go to Bookings</a>
                 </div>
             </div>
         </div>
+
+        <!-- Browse Movies -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-film fs-1 text-danger"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Browse Movies</h5>
+                    <p class="card-text text-muted">Explore the latest movies and book your seat.</p>
+                    <a href="{{ route('user.movies.index') }}" class="btn btn-outline-danger rounded-pill">View Movies</a>
+                </div>
+            </div>
+        </div>
+
+       
     </div>
+</div>
 @endsection

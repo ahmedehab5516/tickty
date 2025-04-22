@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm">
-        <div class="card-header bg-white">
+        <div class="card-header ">
             <h4 class="fw-bold mb-0">Edit Showtime</h4>
         </div>
 
@@ -45,6 +45,21 @@
                         @endforeach
                     </select>
                 </div>
+
+                <!-- Ticket Price -->
+<div class="mb-3">
+  <label for="ticket_price" class="form-label">Ticket Price</label>
+  <input
+    type="number"
+    name="ticket_price"
+    id="ticket_price"
+    class="form-control"
+    step="0.01"
+    min="0"
+    value="{{ old('ticket_price', $showtime->ticket_price) }}"
+    required
+  >
+</div>
 
                 <!-- Start Time -->
                 <div class="mb-3">

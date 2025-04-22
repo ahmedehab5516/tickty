@@ -22,29 +22,31 @@ class ShowtimeController extends Controller
             return view('showtimes.create', compact('movies', 'halls'));
         }
 
-    public function store(Request $request)
-    {
-   $request->validate([
-    'movie_id'    => 'required|exists:movies,id',
-    'hall_id'     => 'required|exists:halls,id',
-    'start_time'  => 'required|date',
-    'end_time'    => 'required|date|after:start_time',
-    'language'    => 'required|string|max:50', // ✅ changed from nullable to required
-    'is_3d'       => 'nullable|boolean',
-]);
+ 
+public function store(Request $request)
+{
+    $request->validate([
+        'movie_id'    => 'required|exists:movies,id',
+        'hall_id'     => 'required|exists:halls,id',
+        'start_time'  => 'required|date',
+        'end_time'    => 'required|date|after:start_time',
+        'language'    => 'required|string|max:50',
+        'is_3d'       => 'nullable|boolean',
+        'ticket_price'=> 'required|numeric|min:0',   // ← new
+    ]);
 
-        Showtime::create([
-            'movie_id'   => $request->movie_id,
-            'hall_id'    => $request->hall_id,
-            'start_time' => $request->start_time,
-            'end_time'   => $request->end_time,
-            'language'   => $request->language,
-            'is_3d'      => $request->is_3d ?? false,
-        ]);
+    Showtime::create([
+        'movie_id'     => $request->movie_id,
+        'hall_id'      => $request->hall_id,
+        'start_time'   => $request->start_time,
+        'end_time'     => $request->end_time,
+        'language'     => $request->language,
+        'is_3d'        => $request->has('is_3d'),
+        'ticket_price' => $request->ticket_price,  // ← new
+    ]);
 
-        return redirect()->route('showtimes.index')->with('success', 'Showtime created successfully.');
-    }
-
+    return redirect()->route('showtimes.index')->with('success', 'Showtime created successfully.');
+}
     public function edit($id)
         {
             $showtime = Showtime::findOrFail($id);
@@ -55,32 +57,33 @@ class ShowtimeController extends Controller
         }
 
 
+
 public function update(Request $request, $id)
 {
-$request->validate([
-    'movie_id'    => 'required|exists:movies,id',
-    'hall_id'     => 'required|exists:halls,id',
-    'start_time'  => 'required|date',
-    'end_time'    => 'required|date|after:start_time',
-    'language'    => 'required|string|max:50', // ✅ same change here
-    'is_3d'       => 'nullable|boolean',
-]);
-
+    $request->validate([
+        'movie_id'     => 'required|exists:movies,id',
+        'hall_id'      => 'required|exists:halls,id',
+        'start_time'   => 'required|date',
+        'end_time'     => 'required|date|after:start_time',
+        'language'     => 'required|string|max:50',
+        'is_3d'        => 'nullable|boolean',
+        'ticket_price'=> 'required|numeric|min:0',   // ← new
+    ]);
 
     $showtime = Showtime::findOrFail($id);
 
     $showtime->update([
-        'movie_id'   => $request->movie_id,
-        'hall_id'    => $request->hall_id,
-        'start_time' => $request->start_time,
-        'end_time'   => $request->end_time,
-        'language'   => $request->language,
-        'is_3d'      => $request->has('is_3d'), // checkbox returns null if not checked
+        'movie_id'     => $request->movie_id,
+        'hall_id'      => $request->hall_id,
+        'start_time'   => $request->start_time,
+        'end_time'     => $request->end_time,
+        'language'     => $request->language,
+        'is_3d'        => $request->has('is_3d'),
+        'ticket_price' => $request->ticket_price,  // ← new
     ]);
 
     return redirect()->route('showtimes.index')->with('success', 'Showtime updated successfully.');
 }
-
   public function destroy($id)
             {
                 $showtime = Showtime::findOrFail($id);

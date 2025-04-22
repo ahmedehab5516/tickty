@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div class="card-header  d-flex justify-content-between align-items-center">
             <h4 class="fw-bold mb-0">All Showtimes</h4>
             <a href="{{ route('showtimes.create') }}" class="btn btn-primary btn-sm">+ Add New Showtime</a>
         </div>
@@ -26,6 +26,7 @@
                                 <th>Cinema</th>
                                 <th>Hall</th>
                                 <th>Language</th>
+                                <th>3D</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
                                 <th>Actions</th>
@@ -36,9 +37,14 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ optional($showtime->movie)->title ?? 'N/A' }}</td>
-                                    <td>{{ optional($showtime->cinema)->name ?? 'N/A' }}</td>
+                                  <td>{{ optional(optional($showtime->hall)->cinema)->name ?? 'N/A' }}</td>
+
                                     <td>{{ optional($showtime->hall)->name ?? 'N/A' }}</td>
                                     <td>{{ $showtime->language ?? 'N/A' }}</td>
+                                  <td>
+                                    {{ $showtime->is_3d === 1 ? 'Yes' : ($showtime->is_3d === 0 ? 'No' : 'N/A') }}
+                                </td>
+
                                     <td>{{ \Carbon\Carbon::parse($showtime->start_time)->format('Y-m-d H:i') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($showtime->end_time)->format('Y-m-d H:i') }}</td>
                                     <td>

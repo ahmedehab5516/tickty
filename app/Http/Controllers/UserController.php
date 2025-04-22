@@ -7,7 +7,10 @@ use App\Models\Booking;
 use App\Models\Movie;
 use App\Models\Seat;
 use App\Models\Showtime;
+use App\Models\User;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -34,90 +37,162 @@ class UserController extends Controller
         return view('user.movies.index', compact('movies'));
     }
 
-    public function showMovie($id)
-    {
-        $movie = Movie::with('showtimes.hall')->findOrFail($id);
-        return view('user.movies.show', compact('movie'));
-    }
 
-public function chooseSeat(Movie $movie, Showtime $showtime)
+
+
+
+
+
+
+
+        public function showMovie($id)
+            {
+                // Retrieve the movie with its showtimes and each hall’s seats,
+                // but only seats that aren’t 'not_assigned'
+                $movie = Movie::with([
+                    'showtimes.hall.seats' => function($q) {
+                        $q->where('seat_type', '!=', 'not_assigned');
+                    }
+                ])->findOrFail($id);
+
+                return view('user.movies.show', compact('movie'));
+            }
+
+        
+public function pay(Request $request)
 {
-    // Fetch all seats related to the showtime's hall
-    $seats = Seat::where('hall_id', $showtime->hall_id)->get();
+    // Validate that we got exactly what we need
+    $request->validate([
+        'movie_id'    => 'required|exists:movies,id',
+        'showtime_id' => 'required|exists:showtimes,id',
+        'seats'       => 'required|json',
+    ]);
 
-    // Group seats by row for easier layout
-    $groupedSeats = $seats->groupBy('seat_row')->sortKeys();
+    // Load the movie & showtime
+    $movie    = Movie::findOrFail($request->movie_id);
+    $showtime = Showtime::findOrFail($request->showtime_id);
 
-    // Get the max number of columns (seats per row)
-    $maxColumns = $seats->max('seat_column');
+    // Decode the JSON array of seat IDs
+    $seatIds = json_decode($request->seats, true);
 
-    // Fetch booked seats for this showtime
-    $bookedSeatIds = Booking::where('showtime_id', $showtime->id)->pluck('seat_id')->toArray();
+    // Load those Seat models
+    $seats = Seat::whereIn('id', $seatIds)->get();
 
-    // Get available seat rows for dropdown
-    $seatRows = $groupedSeats->keys();
-
-    // Return the view with all the data
-    return view('user.bookings.choose_seat', compact(
-        'movie',
-        'showtime',
-        'seats',
-        'groupedSeats',
-        'maxColumns',
-        'bookedSeatIds',
-        'seatRows'
-    ));
+    // Pass them all to the view, plus the per‐ticket price
+    return view('user.bookings.pay', [
+        'movie'            => $movie,
+        'showtime'         => $showtime,
+        'seats'            => $seats,
+        'price_per_ticket' => $showtime->ticket_price,
+        'total' => $request->total_price, // 👈 Pass it directly from the request
+    ]);
 }
 
+   public function Stripe(Request $request)
+{
+    $request->validate([
+        'movie_id'     => 'required|exists:movies,id',
+        'showtime_id'  => 'required|exists:showtimes,id',
+        'seats'        => 'required|json',
+        'stripeToken'  => 'required',
+        'price'        => 'required|numeric',
+    ]);
 
-    public function pay(Movie $movie, Showtime $showtime, Seat $seat)
-    {
-        return view('user.bookings.payment', [
-            'movie' => $movie,
-            'showtime' => $showtime,
-            'seat' => $seat,
-            'price' => 50.00 // Flat or dynamic pricing logic can go here
-        ]);
-    }
+    $seatIds = json_decode($request->seats, true);
 
-    public function storeBooking(Request $request)
-    {
-        $request->validate([
-            'movie_id'     => 'required|exists:movies,id',
-            'showtime_id'  => 'required|exists:showtimes,id',
-            'seat_id'      => 'required|exists:seats,id',
-            'method'       => 'required|in:cash,card,wallet',
-        ]);
-
-        // Check for existing booking for this seat and showtime
+    // ✅ Check if any of the selected seats are already booked
+    foreach ($seatIds as $seatId) {
         $alreadyBooked = Booking::where('showtime_id', $request->showtime_id)
-            ->where('seat_id', $request->seat_id)
+            ->whereJsonContains('seats', $seatId)
             ->exists();
 
         if ($alreadyBooked) {
-            return back()->withErrors(['seat_id' => 'This seat is already booked.'])->withInput();
+            return back()->withErrors(['seats' => "Seat ID $seatId is already booked."])->withInput();
+        }
+    }
+
+    // ✅ Create one booking that stores all selected seat IDs
+    $booking = Booking::create([
+        'user_id'     => auth()->id(),
+        'showtime_id' => $request->showtime_id,
+        'seats'       => $seatIds, // stored as JSON
+        'status'      => 'confirmed',
+    ]);
+
+    // ✅ Create Stripe customer & charge
+    $stripe = new \Stripe\StripeClient(env("STRIPE_SECERT"));
+
+    $customer = $stripe->customers->create([
+        'name'  => auth()->user()->name,
+        'email' => auth()->user()->email,
+        'source' => $request->stripeToken,
+    ]);
+
+    $charge = $stripe->charges->create([
+        'amount'      => $request->price * 100,
+        'currency'    => 'usd',
+        'customer'    => $customer->id,
+        'description' => "Payment for booking tickets",
+    ]);
+
+    // ✅ Create one payment record
+    Payment::create([
+        'booking_id'         => $booking->id,
+        'user_id'            => auth()->id(),
+        'amount'             => $request->price,
+        'method'             => 'card',
+        'status'             => $charge->status === 'succeeded' ? 'paid' : 'failed',
+        'currency'           => $charge->currency,
+        'card_brand'         => $charge->payment_method_details['card']['brand'] ?? null,
+        'card_last4'         => $charge->payment_method_details['card']['last4'] ?? null,
+        'transaction_id'     => $charge->id,
+        'stripe_receipt_url' => $charge->receipt_url,
+        'paid_at'            => now(),
+    ]);
+
+    return redirect()->route('user.bookings.ticket', [
+        'booking_id' => $booking->id,
+    ]);
+
+}
+
+
+        public function Ticket(Request $request)
+        {
+            $booking = Booking::with('showtime', 'payment')->findOrFail($request->booking_id);
+            $movie = Movie::findOrFail($booking->showtime->movie_id);
+            $payment = $booking->payment;
+
+            return view('user.bookings.ticket', compact('booking', 'movie', 'payment'));
         }
 
-        // Create booking
-        $booking = Booking::create([
-            'user_id'     => auth()->id(),
-            'showtime_id' => $request->showtime_id,
-            'seat_id'     => $request->seat_id,
-            'status'      => 'confirmed',
-        ]);
 
-        // Set payment amount (flat for now)
-        $amount = 100.00;
 
-        // Create payment record
-        Payment::create([
-            'booking_id'     => $booking->id,
-            'amount'         => $amount,
-            'method'         => $request->method,
-            'status'         => 'pending',
-            'transaction_id' => null,
-        ]);
-
-        return redirect()->route('user.bookings.index')->with('success', '🎉 Booking confirmed successfully.');
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('user.profile', compact('user'));
     }
+
+
+
+
 }
+
+
+
+// Visa	4242424242424242
+
+// Visa (debit)	4000056655665556
+
+// Mastercard	5555555555554444
+
+// Mastercard (2-series)	2223003122003222
+
+// Mastercard (debit)	5200828282828210
+
+// Mastercard (prepaid)	5105105105105100
+
+// American Express	371449635398431
+
+// Discover	6011000990139424

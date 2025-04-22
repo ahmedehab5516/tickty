@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm">
-        <div class="card-header bg-white">
+        <div class="card-header">
             <h4 class="fw-bold mb-0">Edit Hall - {{ $hall->name }}</h4>
         </div>
 
@@ -51,6 +51,32 @@
                     <label for="seat_column_count" class="form-label">Number of Columns</label>
                     <input type="number" name="seat_column_count" id="seat_column_count" class="form-control" required min="1" value="{{ $hall->seat_column_count }}">
                 </div>
+
+          <!-- VIP Seats -->
+<div class="mb-3">
+  <label for="number_of_vip_seats" class="form-label">Number of VIP Seats</label>
+  <input type="number"
+         name="number_of_vip_seats"
+         id="number_of_vip_seats"
+         class="form-control"
+         required
+         min="0"
+         value="{{ old('number_of_vip_seats', $vipSeatsCount) }}">
+</div>
+
+<!-- Standard Seats -->
+<div class="mb-3">
+  <label for="number_of_standard_seats" class="form-label">Number of Standard Seats</label>
+  <input type="number"
+         name="number_of_standard_seats"
+         id="number_of_standard_seats"
+         class="form-control"
+         required
+         min="0"
+         value="{{ old('number_of_standard_seats', $standardSeatsCount) }}">
+</div>
+
+
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-success">Update Hall</button>
