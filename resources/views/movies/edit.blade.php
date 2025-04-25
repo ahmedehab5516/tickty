@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Update Movie</button>
+                    <button type="submit" class="btn">Update Movie</button>
                 </div>
             </form>
         </div>
@@ -114,9 +114,9 @@
         // Load TMDb genres
         const genreSelect = document.getElementById('genre');
         const selectedGenre = "{{ old('genre', $movie->genre) }}";
-        const apiKey = "29ddf482d3350a1433bf470b08f8d0e0";
+          const tmdbApiKey = "{{ env('TMDB_KEY') }}"; // Embedding the API key
 
-        fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`)
+        fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbApiKey}&language=en-US`)
             .then(response => response.json())
             .then(data => {
                 genreSelect.innerHTML = '<option value="">-- Select Genre --</option>';

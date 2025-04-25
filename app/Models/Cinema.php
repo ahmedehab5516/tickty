@@ -10,7 +10,8 @@ class Cinema extends Model
  protected $fillable = [
         'name',
         'location',
-        'owner_company_id',
+        'company_id',
+        'admin_id',
     
     ];
 
@@ -20,7 +21,7 @@ class Cinema extends Model
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'owner_company_id');
+        return $this->belongsTo(Company::class, 'company_id');
     } 
     
        public function halls()

@@ -25,7 +25,7 @@ class IsAdmin
                     ->where('id', $user->role_id)
                     ->value('role_title');
 
-                if ($roleTitle === 'admin' || $roleTitle === 'superadmin') {
+                if ($roleTitle === 'admin' || $roleTitle === 'superadmin' || $roleTitle === 'developer'  ) {
                     return $next($request);
                 }
             }

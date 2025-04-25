@@ -12,7 +12,7 @@ class RegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('auth.register');  // Make sure the register view has a field for phone number
     }
 
     public function register(Request $request)
@@ -20,7 +20,8 @@ class RegisterController extends Controller
         // Validation
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'phone' => 'required|string|regex:/^01[0-9]{9}$/|unique:users,phone', // Validate phone number format and uniqueness
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -28,11 +29,12 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,  // Store phone number
             'password' => Hash::make($request->password),
         ]);
 
         // Optional: assign default role
-        $user->role_id = '1'; // You can customize this or pull from $request
+        $user->role_id = 1; // You can customize this or pull from $request
         $user->save();
 
         // Log the user in

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -13,8 +14,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role_id',
+        'salary',
+        'company_id' , 
+        'cinema_id',
+        'profile_image'
+        
     ];
 
     protected $hidden = [
@@ -27,7 +34,6 @@ class User extends Authenticatable
     ];
 
     // Relationships
-
     public function bookings()
     {
         return $this->hasMany(Booking::class);
@@ -47,4 +53,23 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Showtime::class, Booking::class);
     }
+
+
+ // Relationship: A user belongs to a company
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    // Relationship: A user belongs to a cinema (only for admins and staff)
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class, 'cinema_id');
+    }
+    public function role()
+{
+    return $this->belongsTo(Role::class);
+}
+
+   
 }

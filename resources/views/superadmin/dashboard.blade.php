@@ -16,7 +16,7 @@
                     <div class="card-header">Manage Admins</div>
                     <div class="card-body">
                         <p class="card-text">Add or remove admins, assign roles, and manage privileges.</p>
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-sm">Manage Admins</a>
+                        <a href="{{ route('admin.dashboard') }}" class="btn">Manage Admins</a>
                     </div>
                 </div>
             </div>

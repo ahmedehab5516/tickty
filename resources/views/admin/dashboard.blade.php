@@ -19,7 +19,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">Manage Movies</h5>
                                         <p class="card-text">Add, edit, or remove movies in the system.</p>
-                                        <a href="{{ route('movies.index') }}" class="btn btn-primary">Manage Movies</a>
+                                        <a href="{{ route('movies.index') }}" class="btn">Manage Movies</a>
                                     </div>
                                 </div>
                             </div>
@@ -28,7 +28,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">Manage Cinemas</h5>
                                         <p class="card-text">Add, edit, or remove cinemas.</p>
-                                        <a href="{{ route('cinemas.index') }}" class="btn btn-primary">Manage Cinemas</a>
+                                        <a href="{{ route('cinemas.index') }}" class="btn">Manage Cinemas</a>
                                     </div>
                                 </div>
                             </div>

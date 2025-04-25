@@ -23,4 +23,6 @@ class Company extends Model
     return $this->hasMany(Cinema::class, 'owner_company_id');
 }
 
+
+ 
 }

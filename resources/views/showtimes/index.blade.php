@@ -48,12 +48,12 @@
                                     <td>{{ \Carbon\Carbon::parse($showtime->start_time)->format('Y-m-d H:i') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($showtime->end_time)->format('Y-m-d H:i') }}</td>
                                     <td>
-                                        <a href="{{ route('showtimes.edit', $showtime->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a href="{{ route('showtimes.edit', $showtime->id) }}" class="btn btn-sm">Edit</a>
 
                                         <form action="{{ route('showtimes.destroy', $showtime->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this showtime?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            <button type="submit" class="btn btn-sm">Delete</button>
                                         </form>
                                     </td>
                                 </tr>

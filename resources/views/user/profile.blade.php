@@ -1,25 +1,22 @@
 @extends('layouts.app')
 
+@section('title', 'Super Admin Profile')
+
 @section('content')
-
-
 <div class="container mt-5">
     <div class="profile-box shadow-sm">
         {{-- Profile Image --}}
         <div class="profile-image">
-            <img src="{{ asset('images/profile-placeholder.jpg') }}" alt="Profile Photo">
+            <img class="profile-img" src="{{ asset('storage/' . ($user->profile_image ? $user->profile_image : 'profile_images/profile-placeholder.jpg')) }}" alt="Profile Photo">
         </div>
 
         {{-- Profile Info --}}
         <div class="profile-info">
             <h1 class="fw-bold mb-1">Hello!</h1>
             <p class="text-muted">I'm a registered user of Tickty.</p>
-
-             
             <p>
                 I love going to the movies and managing my bookings with ease. Whether it’s action, drama, or thriller — I’m always up for a good film night.
             </p>
-
             {{-- User Details --}}
             <div class="profile-details mt-4">
                 <p><strong>Name:</strong> {{ $user->name }}</p>
@@ -30,54 +27,57 @@
         </div>
     </div>
 
-    {{-- Bookings Summary --}}
+    {{-- Update Profile Accordion Section --}}
     <div class="summary-section mt-4">
-        <h5 class="fw-bold mb-2">🎟️ Bookings Summary</h5>
-        <p>You’ve made <strong>{{ $user->bookings->count() }}</strong> ticket bookings so far.</p>
-    </div>
+        <div class="accordion" id="profileAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <h5 class="fw-bold mb-0">Update Profile</h5>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#profileAccordion">
+                    <div class="accordion-body">
+                        {{-- Profile Update Form --}}
+                        <form method="POST" action="{{ route('user.update_profile', $user->id) }}" style="text-align: center;" enctype="multipart/form-data" id="profileForm">
+                            @csrf
+                            @method('PUT')
 
-{{-- Saved Cards Section --}}
-<div class="summary-section mt-4">
-    <h5 class="fw-bold mb-2">💳 Saved Cards</h5>
-    @if($user->payments->whereNotNull('card_last4')->count())
-        <ul class="list-group list-group-flush">
-            @foreach($user->payments->whereNotNull('card_last4')->unique('card_last4') as $index => $card)
-                <li class="list-group-item">
-                    <a href="#" class="text-decoration-none text-dark"
-                       data-bs-toggle="modal"
-                       data-bs-target="#cardModal{{ $index }}">
-                        • {{ ucfirst($card->card_brand ?? 'Card') }} ending in <strong>{{ $card->card_last4 }}</strong>
-                    </a>
+                            <div class="mb-3">
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Name" value="{{ old('name', $user->name) }}">
+                            </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="cardModal{{ $index }}" tabindex="-1" aria-labelledby="cardModalLabel{{ $index }}" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content shadow-sm">
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title" id="cardModalLabel{{ $index }}">💳 Card Details</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Card Brand:</strong> {{ ucfirst($card->card_brand ?? 'N/A') }}</p>
-                                    <p><strong>Last 4 Digits:</strong> {{ $card->card_last4 }}</p>
-                                
-                                  
-                                   
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <div class="mb-3">
+                                <input type="email" name="email" id="email" placeholder="Email" class="form-control" value="{{ old('email', $user->email) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <input type="text" name="phone" id="phone" placeholder="Phone" class="form-control" value="{{ old('phone', $user->phone) }}">
+                            </div>
+
+                            <!-- File Upload -->
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="file" name="profile_image" id="profile_image" class="form-control d-none" onchange="checkFileSize()">
+                                    <button type="button" class="btn btn-outline-secondary" id="chooseFileButton" onclick="document.getElementById('profile_image').click();">
+                                        Choose File
+                                    </button>
+                                    <input type="text" class="form-control" id="fileName" placeholder="No file chosen" disabled>
                                 </div>
                             </div>
-                        </div>
+
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                        
                     </div>
-                </li>
-            @endforeach
-        </ul>
-    @else
-        <p class="text-muted">No saved cards yet.</p>
-    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+
 </div>
+
 @endsection
 

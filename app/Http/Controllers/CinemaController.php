@@ -5,27 +5,45 @@ namespace App\Http\Controllers;
 use App\Models\Cinema;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CinemaController extends Controller
 {
-    public function index()
+
+
+   public function index()
     {
-        $cinemas = Cinema::with('company')->latest()->get();
+        // Get the company ID of the logged-in user
+        $companyId = Auth::user()->company_id;
+
+        // Fetch cinemas belonging to the logged-in user's company
+        $cinemas = Cinema::where('company_id', $companyId)
+                        ->latest()
+                        ->get();
+
+        // Pass cinemas to the view
         return view('cinemas.index', compact('cinemas'));
     }
 
-    public function create()
-    {
-        $companies = Company::all();
-        return view('cinemas.create', compact('companies'));
-    }
+
+        public function create()
+        {
+            // Get the currently authenticated super admin
+            $superAdmin = Auth::user(); 
+
+            // Assuming the super admin has a company associated with them, get the company ID
+            $company = $superAdmin->company; // Adjust based on your relationships, e.g., $superAdmin->company_id if it's not a relationship
+
+            return view('cinemas.create', compact('company'));
+        }
+
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'owner_company_id' => 'required|exists:companies,id',
+       
         ]);
 
         Cinema::create($request->all());
@@ -45,7 +63,7 @@ class CinemaController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'owner_company_id' => 'required|exists:companies,id',
+           
         ]);
 
         $cinema = Cinema::findOrFail($id);

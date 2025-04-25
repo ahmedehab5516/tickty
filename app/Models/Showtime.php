@@ -15,6 +15,7 @@ class Showtime extends Model
         'end_time',
         'language',
         'is_3d',
+        'cinema_id',
         'ticket_price',
         
     ];

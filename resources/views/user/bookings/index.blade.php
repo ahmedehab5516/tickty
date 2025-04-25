@@ -46,7 +46,8 @@
                     </span>
                 @endforeach
             </td>
-            <td>{{ \Carbon\Carbon::parse($booking->showtime->start_time)->format('Y-m-d H:i') }}</td>
+       <td>{{ $booking->showtime ? \Carbon\Carbon::parse($booking->showtime->start_time)->format('Y-m-d H:i') : 'N/A' }}</td>
+
             <td>
                 <span class="badge bg-{{ $booking->status == 'confirmed' ? 'success' : 'warning' }}">
                     {{ ucfirst($booking->status) }}

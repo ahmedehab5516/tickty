@@ -35,6 +35,13 @@
                             @enderror
                         </div>
 
+                                <!-- Phone -->
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" name="phone" id="phone" class="form-control" value="{{ old('phone') }}" required>
+                        </div>
+
+
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>

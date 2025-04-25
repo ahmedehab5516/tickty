@@ -7,27 +7,26 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    /**
-     * Display a listing of the movies.
-     */
-    public function index()
+ public function index()
     {
-        $movies = Movie::with('showtimes')->latest()->get();
+        // Get the company_id of the logged-in user
+        $companyId = auth()->user()->company_id;
+
+        // Fetch movies for the logged-in user's company
+        $movies = Movie::where('company_id', $companyId)->with('showtimes')->latest()->get();
+
         return view('movies.index', compact('movies'));
     }
 
-    /**
-     * Show the form for creating a new movie.
-     */
+
+
+
     public function create()
     {
         return view('movies.create');
     }
 
-    /**
-     * Store a newly created movie in storage.
-     */
-    public function store(Request $request)
+     public function store(Request $request)
     {
         $request->validate([
             'title'            => 'required|string|max:255',
@@ -40,8 +39,13 @@ class MovieController extends Controller
             'trailer_url'      => 'nullable|url',
         ]);
 
+        // Calculate the duration in minutes
         $duration_minutes = ($request->duration_hours * 60) + $request->duration_mins;
 
+        // Get the company_id of the logged-in user
+        $companyId = auth()->user()->company_id;
+
+        // Create the movie and associate it with the company_id
         Movie::create([
             'title'            => $request->title,
             'description'      => $request->description,
@@ -50,32 +54,35 @@ class MovieController extends Controller
             'rating'           => $request->rating,
             'poster_url'       => $request->poster_url,
             'trailer_url'      => $request->trailer_url,
+            'company_id'       => $companyId,  // Assign company_id
         ]);
 
         return redirect()->route('movies.index')->with('success', 'Movie created successfully.');
     }
 
-    /**
-     * Display the specified movie as JSON (for API use).
-     */
     public function show($id)
     {
-        $movie = Movie::findOrFail($id);
+        // Get the company_id of the logged-in user
+        $companyId = auth()->user()->company_id;
+
+        // Fetch the movie and ensure it belongs to the logged-in user's company
+        $movie = Movie::where('company_id', $companyId)->findOrFail($id);
+        
         return response()->json($movie);
     }
 
-    /**
-     * Show the form for editing the specified movie.
-     */
-    public function edit($id)
+  public function edit($id)
     {
-        $movie = Movie::findOrFail($id);
+        // Get the company_id of the logged-in user
+        $companyId = auth()->user()->company_id;
+
+        // Fetch the movie and ensure it belongs to the logged-in user's company
+        $movie = Movie::where('company_id', $companyId)->findOrFail($id);
+
         return view('movies.edit', compact('movie'));
     }
 
-    /**
-     * Update the specified movie in storage.
-     */
+   
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -89,7 +96,12 @@ class MovieController extends Controller
             'trailer_url'      => 'nullable|url',
         ]);
 
-        $movie = Movie::findOrFail($id);
+        // Get the company_id of the logged-in user
+        $companyId = auth()->user()->company_id;
+
+        // Fetch the movie and ensure it belongs to the logged-in user's company
+        $movie = Movie::where('company_id', $companyId)->findOrFail($id);
+
         $movie->update([
             'title'            => $request->title,
             'description'      => $request->description,
@@ -102,21 +114,23 @@ class MovieController extends Controller
 
         return redirect()->route('movies.index')->with('success', 'Movie updated successfully.');
     }
-
    
-public function destroy($id)
-{
-    $movie = Movie::findOrFail($id);
+  public function destroy($id)
+    {
+        // Get the company_id of the logged-in user
+        $companyId = auth()->user()->company_id;
 
-    // Delete related showtimes first
-    $movie->showtimes()->delete();
+        // Fetch the movie and ensure it belongs to the logged-in user's company
+        $movie = Movie::where('company_id', $companyId)->findOrFail($id);
 
-    // Delete the movie
-    $movie->delete();
+        // Delete related showtimes first
+        $movie->showtimes()->delete();
 
-    return redirect()->route('movies.index')->with('success', 'Movie and its showtimes were deleted successfully.');
-}
+        // Delete the movie
+        $movie->delete();
 
+        return redirect()->route('movies.index')->with('success', 'Movie and its showtimes were deleted successfully.');
+    }
 
      
 

@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
+@section('title', 'Login - Tickty')
+
 @section('content')
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm border-0">
-                <div class="card-header text-center border-bottom-0">
-                    <h4 class="fw-bold mb-0">Welcome Back 👋</h4>
-                    <p class="text-muted small mt-1">Please login to your account</p>
-                </div>
+             <div class="card-header text-center border-bottom-0  text-white rounded-top py-4">
+                <h4 class="fw-bold mb-2 display-4">Welcome Back</h4>
+            </div>
+
                 <div class="card-body py-4">
                     <!-- Login Form -->
                     <form method="POST" action="{{ route('login') }}">
@@ -29,7 +31,7 @@
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group">
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
-                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+                                <button class="btn " type="button" id="togglePassword">Show</button>
                             </div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -52,7 +54,7 @@
                         <!-- Register Link -->
                         <div class="text-center mt-3">
                             <p class="small">Don't have an account?
-                                <a href="{{ route('register') }}" class="text-decoration-none">Register here</a>
+                                <a href="{{ route('register') }}" class="text-decoration-none" ><span>Register here</span></a>
                             </p>
                         </div>
                     </form>

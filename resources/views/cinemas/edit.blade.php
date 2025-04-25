@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Update Cinema</button>
+                    <button type="submit" class="btn">Update Cinema</button>
                 </div>
             </form>
         </div>

@@ -35,12 +35,12 @@
                                     <td>{{ $hall->seats->whereIn('seat_type', ['vip', 'standard'])->count() }}</td>
                                     <td>{{ $hall->showtimes->count() }}</td>
                                     <td>
-                                        <a href="{{ route('halls.edit', $hall->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                        <a href="{{ route('halls.view_seats', $hall->id) }}" class="btn btn-sm btn-outline-warning">View Seats</a>
+                                        <a href="{{ route('halls.edit', $hall->id) }}" class="btn btn-sm ">Edit</a>
+                                        <a href="{{ route('halls.view_seats', $hall->id) }}" class="btn btn-sm">View Seats</a>
                                         <form action="{{ route('halls.destroy', $hall->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this hall?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            <button type="submit" class="btn btn-sm ">Delete</button>
                                         </form>
                                     </td>
                                 </tr>

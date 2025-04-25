@@ -15,6 +15,7 @@ class Movie extends Model
         'genre',
         'rating',
         'poster_url',
+        'company_id',
         'trailer_url',
     ];
 

@@ -174,6 +174,49 @@ public function pay(Request $request)
         return view('user.profile', compact('user'));
     }
 
+    
+public function updateProfile(Request $request, $id)
+{
+    // Validate the incoming request
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email,' . $id, // Ensures the email is unique except for the current user
+        'phone' => 'required|string|max:20',
+        'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Optionally handle image upload
+    ]);
+
+    // Find the Super user by ID
+    $user = User::findOrFail($id);
+
+    // Update the Super user's profile
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->phone = $request->phone;
+
+    // Handle profile image upload (if any)
+    if ($request->hasFile('profile_image')) {
+        // Delete the old profile image if it exists
+        if ($user->profile_image) {
+            $oldImagePath = public_path('storage/' . $user->profile_image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Delete the old image
+            }
+        }
+
+        // Store the new image
+        $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+        // Update the profile image path in the database
+        $user->profile_image = $imagePath;
+    }
+
+    // Save the updated data
+    $user->save();
+
+    // Redirect back to the profile page with a success message
+    return redirect()->route('user.profile')->with('success', 'Profile updated successfully!');
+}
+
+
 
 
 

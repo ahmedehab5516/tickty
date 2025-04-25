@@ -5,7 +5,7 @@
     <div class="card shadow-sm border-0">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="fw-bold mb-0">All Cinemas</h4>
-            <a href="{{ route('cinemas.create') }}" class="btn btn-primary btn-sm">+ Add New Cinema</a>
+            <a href="{{ route('cinemas.create') }}" class="btn btn-outline">+ Add New Cinema</a>
         </div>
 
         <div class="card-body">
@@ -23,7 +23,7 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Location</th>
-                                <th>Owner Company</th>
+                         
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -33,7 +33,7 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $cinema->name }}</td>
                                     <td>{{ $cinema->location }}</td>
-                                    <td>{{ $cinema->company->company_name ?? 'N/A' }}</td>
+                               
                                     <td>
                                         <a href="{{ route('cinemas.edit', $cinema->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                         <form action="{{ route('cinemas.destroy', $cinema->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?');">
@@ -52,3 +52,5 @@
     </div>
 </div>
 @endsection
+
+

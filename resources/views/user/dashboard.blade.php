@@ -22,7 +22,7 @@
                     </div>
                     <h5 class="card-title fw-bold">My Bookings</h5>
                     <p class="card-text text-muted">Check your current and past bookings.</p>
-                    <a href="{{ route('user.bookings.index') }}" class="btn btn-outline-primary rounded-pill">Go to Bookings</a>
+                    <a href="{{ route('user.bookings.index') }}" class="btn rounded-pill">Go to Bookings</a>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     </div>
                     <h5 class="card-title fw-bold">Browse Movies</h5>
                     <p class="card-text text-muted">Explore the latest movies and book your seat.</p>
-                    <a href="{{ route('user.movies.index') }}" class="btn btn-outline-danger rounded-pill">View Movies</a>
+                    <a href="{{ route('user.movies.index') }}" class="btn">View Movies</a>
                 </div>
             </div>
         </div>

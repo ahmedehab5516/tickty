@@ -86,10 +86,20 @@
                     <label for="end_time" class="form-label">End Time</label>
                     <input type="datetime-local" name="end_time" id="end_time" class="form-control" required>
                 </div>
+                
+                <!-- Is 3D -->
+                <div class="mb-3">
+                    <label for="is_3d" class="form-label">Is this a 3D movie?</label><br>
+                    <input type="radio" name="is_3d" value="1" {{ old('is_3d') == '1' ? 'checked' : '' }}> Yes
+                    <input type="radio" name="is_3d" value="0" {{ old('is_3d') == '0' ? 'checked' : '' }}> No
+                </div>
+ 
+
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-success">Create Showtime</button>
                 </div>
+                
             </form>
         </div>
     </div>

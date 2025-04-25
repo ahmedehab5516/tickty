@@ -31,18 +31,8 @@
                     <input type="text" name="location" id="location" class="form-control" required value="{{ old('location') }}">
                 </div>
 
-                <div class="mb-3">
-                    <label for="owner_company_id" class="form-label">Owner Company</label>
-                    <select name="owner_company_id" id="owner_company_id" class="form-select" required>
-                        <option value="">-- Select Company --</option>
-                        @foreach ($companies as $company)
-                            <option value="{{ $company->id }}" {{ old('owner_company_id') == $company->id ? 'selected' : '' }}>
-                                {{ $company->company_name }}
-                            </option>
-                        @endforeach
-
-                    </select>
-                </div>
+                 <!-- Hidden Company ID (Automatically added in Controller) -->
+                <input type="hidden" name="company_id" value="{{ $company->id }}">
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-success">Create Cinema</button>

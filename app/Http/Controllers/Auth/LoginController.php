@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -19,6 +20,12 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
+    /**
+     * Handle login attempt.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function login(Request $request)
     {
         // Validate the login data
@@ -27,36 +34,49 @@ class LoginController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-    // dd($request->only('email', 'password')); // Will dump the email and password before attempting login
-
-    
+        // Attempt login
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
             // Redirect based on user role
             return redirect()->intended($this->redirectPath());
         }
 
-
+        // Return back with an error if login fails
         return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
-    ]);
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 
-
+    /**
+     * Get the redirect path based on user role.
+     *
+     * @return string
+     */
     protected function redirectPath()
     {
-        // Redirect to specific dashboards based on the user's role
-        $role = Auth::User()->role_id ?? 1;
+        // Fetch the authenticated user
+        $user = Auth::user();
 
-        switch ($role) {
-            case 2:
-                return route('admin.dashboard');
-            case 3:
-                return route('superadmin.dashboard');
-            default:
-                return route('user.dashboard');
+        // If user is authenticated, check the role
+        if ($user) {
+            // Fetch the role_title using role_id
+            $roleTitle = DB::table('roles')
+                ->where('id', $user->role_id)
+                ->value('role_title');
+
+            // Redirect based on the role
+            switch ($roleTitle) {
+                case 'admin':
+                    return route('admin.dashboard');
+                case 'superadmin':
+                    return route('superadmin.dashboard');
+                case 'staff':
+                    return route('staff.dashboard');
+                default:
+                    return route('user.dashboard');
+            }
         }
+
+        // Default redirect if no role found (fallback)
+        return route('home');
     }
-
-
- 
 }
