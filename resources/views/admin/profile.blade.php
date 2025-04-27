@@ -8,6 +8,9 @@
 /* Hide the default file input */
 input[type="file"].d-none {
     display: none;
+
+
+    
 }
 
 /* Style the file name display */
